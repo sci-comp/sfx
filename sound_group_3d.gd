@@ -34,6 +34,10 @@ func stop_source(src: AudioStreamPlayer3D):
 	available_sources.append(src)
 
 func get_available_source() -> AudioStreamPlayer3D:
+	if available_sources.size() == 0 and active_sources.size() == 0:
+		push_error("SoundGroup3D has no AudioStreamPlayer3D children")
+		return null
+	
 	var src: AudioStreamPlayer3D
 	
 	# Stop an active source if necessary
@@ -44,7 +48,7 @@ func get_available_source() -> AudioStreamPlayer3D:
 	var idx = randi() % available_sources.size()
 	src = available_sources[idx]
 	src.pitch_scale = randf_range(vary_pitch.x, vary_pitch.y)
-	src.volume_db = linear_to_db(randf_range(vary_volume.x, vary_volume.y))
+	src.volume_db = randf_range(linear_to_db(vary_volume.x), linear_to_db(vary_volume.y))
 	available_sources.remove_at(idx)
 	active_sources.append(src)
 	

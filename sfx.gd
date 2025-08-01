@@ -3,16 +3,40 @@ extends Node
 @export var master_volume: float = 0.7
 
 var sound_groups: Dictionary = {}
-var camera_bridge: Node
+var main_camera: Camera3D
 
 func _ready():
-	camera_bridge = get_node("/root/CameraBridge")
 	find_sound_groups(self)
+	find_main_camera()
 	
 	for sound_group in sound_groups.values():
 		sound_group.initialize(self)
 	
 	print_rich("[SFX] [color=MediumSeaGreen]Ready[/color] with ", sound_groups.size(), " sound groups")
+
+func find_main_camera():
+	var cameras = get_tree().get_nodes_in_group("MainCamera")
+	if cameras.size() > 0:
+		main_camera = cameras[0]
+		print("[SFX] Found main camera: ", main_camera.name)
+	else:
+		print("[SFX] No MainCamera group found")
+
+func set_main_camera(camera: Camera3D):
+	main_camera = camera
+	print("[SFX] Main camera set to: ", camera.name)
+
+func get_camera_position() -> Vector3:
+	if main_camera:
+		return main_camera.global_position
+	return Vector3.ZERO
+
+func play(sound_group_name: String):
+	play_sound(sound_group_name, get_camera_position())
+
+func play_sound(sound_group_name: String, location: Vector3 = Vector3.ZERO):
+	if location == Vector3.ZERO:
+		location = get_camera_position()
 
 func find_sound_groups(node: Node):
 	sound_groups.clear()
@@ -21,24 +45,3 @@ func find_sound_groups(node: Node):
 			sound_groups[child.name] = child
 		else:
 			find_sound_groups(child)
-
-func play(sound_group_name: String):
-	play_sound(sound_group_name, camera_bridge.camera_position)
-
-func play_sound(sound_group_name: String, location: Vector3 = Vector3.ZERO):
-	if location == Vector3.ZERO:
-		location = camera_bridge.camera_position
-	
-	if not sound_groups.has(sound_group_name):
-		print("[SFX] Requested a sound group that does not exist: ", sound_group_name)
-		return
-	
-	var sound_group = sound_groups[sound_group_name]
-	var source = sound_group.get_available_source()
-	
-	if source:
-		if source.playing:
-			print("Sound group is already playing")
-		print("[SFX] Playing: ", sound_group_name)
-		source.position = location
-		source.play()

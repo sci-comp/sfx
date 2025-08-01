@@ -64,11 +64,10 @@ func scan_for_sound_groups():
 func scan_node_recursive(node: Node, category: String):
 	for child in node.get_children():
 		var script = child.get_script()
-		if script:
-			if child is SoundGroup3D:
-				if is_valid_sound_group(child):
-					sound_groups[child.name] = child
-					sound_categories[child.name] = category
+		if child is SoundGroup3D:
+			if is_valid_sound_group(child):
+				sound_groups[child.name] = child
+				sound_categories[child.name] = category
 		
 		if child.get_child_count() > 0:
 			var child_category = child.name if child.name != "SFX" else category
