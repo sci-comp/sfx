@@ -6,10 +6,8 @@ var sfx_node: Node = null
 var sound_groups: Dictionary = {}
 var sound_categories: Dictionary = {}
 
-var title_label: Label
-var status_label: Label
 var refresh_button: Button
-var sound_container: VBoxContainer
+var sound_container: HBoxContainer
 
 func _ready():
 	name = "SFX Preview"
@@ -19,20 +17,15 @@ func _ready():
 
 func setup_ui():
 	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	size_flags_vertical = Control.SIZE_EXPAND_FILL
-	
-	var main_vbox = VBoxContainer.new()
-	main_vbox.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	add_child(main_vbox)
 	
 	var scroll_container = ScrollContainer.new()
 	scroll_container.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	scroll_container.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	scroll_container.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	main_vbox.add_child(scroll_container)
-
-	sound_container = VBoxContainer.new()
+	add_child(scroll_container)
+	
+	sound_container = HBoxContainer.new()
+	sound_container.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	sound_container.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	scroll_container.add_child(sound_container)
 
@@ -50,15 +43,14 @@ func refresh_scene_context():
 
 func check_scene_validity():
 	if not current_scene:
-		status_label.text = "No scene open"
+		print("[SFXPreviewDock] No scene open")
 		return
 	
 	if current_scene.name != "SFX":
-		status_label.text = "Open scene with root node named 'SFX'"
+		print("[SFXPreviewDock] Open scene with root node named SFX")
 		return
 	
-	status_label.text = "SFX scene detected"
-	status_label.modulate = Color.GREEN
+	print("[SFXPreviewDock] SFX scene detected")
 
 func is_valid_sfx_scene() -> bool:
 	return current_scene != null and current_scene.name == "SFX"
@@ -123,8 +115,8 @@ func show_no_sounds_in_scene():
 	sound_container.add_child(label)
 
 func update_status_with_count():
-	status_label.text = "Found " + str(sound_groups.size()) + " sound groups"
-	status_label.modulate = Color.GREEN
+	
+	print("[SFXPreviewDock] Found " + str(sound_groups.size()) + " sound groups")
 
 func get_organized_categories() -> Dictionary:
 	var categories = {}

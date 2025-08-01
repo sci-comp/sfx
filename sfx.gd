@@ -17,7 +17,7 @@ func _ready():
 func find_sound_groups(node: Node):
 	sound_groups.clear()
 	for child in node.get_children():
-		if child.get_script() and child.get_script().resource_path.contains("SoundGroup3D"):
+		if child is SoundGroup3D:
 			sound_groups[child.name] = child
 		else:
 			find_sound_groups(child)

@@ -37,7 +37,7 @@ func get_available_source() -> AudioStreamPlayer3D:
 	var src: AudioStreamPlayer3D
 	
 	# Stop an active source if necessary
-	if (available_sources.size() > 0 and active_sources.size() >= max_voices) or available_sources.size() == 0:
+	if available_sources.size() == 0 or active_sources.size() >= max_voices:
 		src = active_sources[0]
 		stop_source(src)
 	
