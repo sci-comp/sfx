@@ -128,7 +128,7 @@ func get_organized_categories() -> Dictionary:
 		categories[category].append(sound_name)
 	
 	for category in categories.keys():
-		categories[category].sort()
+		categories[category].sort_custom(func(a, b): return a.naturalnocasecmp_to(b) < 0)
 	
 	return categories
 
@@ -138,7 +138,7 @@ func create_column_layout(categories: Dictionary):
 	sound_container.add_child(hbox)
 	
 	var sorted_categories = categories.keys()
-	sorted_categories.sort()
+	sorted_categories.sort_custom(func(a, b): return a.naturalnocasecmp_to(b) < 0)
 	
 	for category in sorted_categories:
 		if categories[category].size() > 0:
