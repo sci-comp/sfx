@@ -4,6 +4,7 @@ var sound_groups: Dictionary = {}
 var main_camera: Camera3D
 
 func _ready():
+	sound_groups.clear()
 	find_sound_groups(self)
 	find_main_camera()
 	
@@ -46,7 +47,6 @@ func play_sound(sound_group_name: String, location: Vector3 = Vector3.ZERO):
 		print("[SFX] Sound group not found: ", sound_group_name)
 
 func find_sound_groups(node: Node):
-	sound_groups.clear()
 	for child in node.get_children():
 		if child is SoundGroup3D:
 			sound_groups[child.name] = child
