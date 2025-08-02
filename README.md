@@ -1,5 +1,3 @@
-![logo](./Documentation/Image/SBIcon.png)
-
 # SFX - A Sound Effects Player for Godot
 
 ![Demo](Documentation/demo.png)
