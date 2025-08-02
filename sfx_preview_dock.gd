@@ -15,6 +15,12 @@ func _ready():
 	setup_ui()
 	refresh_scene_context()
 
+# This might not be necessary, let's not clutter our hotkeys unless necessary
+#func _unhandled_key_input(event):
+#	if event.pressed and event.alt_pressed and event.keycode == KEY_P:
+#		refresh_scene_context()
+#		print("[SFXPreviewDock] Refreshed (Alt+P)")
+
 func setup_ui():
 	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	
@@ -170,6 +176,10 @@ func play_sound_preview(sound_name: String):
 		return
 	
 	var sound_group = sound_groups[sound_name]
+	if not is_instance_valid(sound_group):
+		refresh_scene_context()
+		return
+	
 	var audio_players = get_audio_players(sound_group)
 	
 	if audio_players.is_empty():
