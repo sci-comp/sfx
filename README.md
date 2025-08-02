@@ -64,16 +64,33 @@ Open any scene with root named "SFX" and use the bottom SFX panel to test sounds
 
 For non-3D sounds (UI, music), use SFX2D - a simpler version without spatial positioning.
 
-Setup: todo
+### Setup
+
+Create SFX2D.tscn with the following hierarchy:
+
+```
+SFX2D (Node, sfx2d.gd)
+├── Accept (AudioStreamRandomizer)
+└── Cancel (AudioStreamRandomizer)
+└── and so on...
+```
+
+Add autoload: `SFX2D.tscn` as "SFX2D"
+
+### Usage
 
 **GDScript:**
 ```gdscript
-SFX2D.play_sound("ButtonClick")
+SFX2D.play_sound("Accept")
+SFX2D.play_sound("Cancel")
 ```
 
 **C#:**
-
-todo
+```csharp
+var sfx = GetNode<SFXBridge>("/root/SFX/SFXBridge");
+sfx.Play2D("Accept");
+sfx.Play2D("Cancel");
+```
 
 ## Files
 

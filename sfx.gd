@@ -1,7 +1,5 @@
 extends Node
 
-@export var master_volume: float = 0.7
-
 var sound_groups: Dictionary = {}
 var main_camera: Camera3D
 
@@ -37,6 +35,15 @@ func play(sound_group_name: String):
 func play_sound(sound_group_name: String, location: Vector3 = Vector3.ZERO):
 	if location == Vector3.ZERO:
 		location = get_camera_position()
+	
+	if sound_groups.has(sound_group_name):
+		var sound_group = sound_groups[sound_group_name]
+		var source = sound_group.get_available_source()
+		if source:
+			source.global_position = location
+			source.play()
+	else:
+		print("[SFX] Sound group not found: ", sound_group_name)
 
 func find_sound_groups(node: Node):
 	sound_groups.clear()
