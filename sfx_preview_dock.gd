@@ -15,11 +15,10 @@ func _ready():
 	setup_ui()
 	refresh_scene_context()
 
-# This might not be necessary, let's not clutter our hotkeys unless necessary
-#func _unhandled_key_input(event):
-#	if event.pressed and event.alt_pressed and event.keycode == KEY_P:
-#		refresh_scene_context()
-#		print("[SFXPreviewDock] Refreshed (Alt+P)")
+func _unhandled_key_input(event):
+	if event.pressed and event.alt_pressed and event.keycode == KEY_P:
+		refresh_scene_context()
+		print("[SFXPreviewDock] Refreshed (Alt+Y)")
 
 func setup_ui():
 	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
@@ -53,13 +52,13 @@ func check_scene_validity():
 		return
 	
 	if current_scene.name != "SFX":
-		print("[SFXPreviewDock] Open scene with root node named SFX")
+		print("[SFXPreviewDock] Open scene with SFXManager3D script attached to root")
 		return
 	
 	print("[SFXPreviewDock] SFX scene detected")
 
 func is_valid_sfx_scene() -> bool:
-	return current_scene != null and current_scene.name == "SFX"
+	return current_scene != null and current_scene is SFXManager3D
 
 func scan_for_sound_groups():
 	sound_groups.clear()
@@ -75,8 +74,12 @@ func scan_node_recursive(node: Node, category: String):
 				sound_groups[child.name] = child
 				sound_categories[child.name] = category
 		
-		if child.get_child_count() > 0:
-			var child_category = child.name if child.name != "SFX" else category
+		elif child.get_child_count() > 0:
+			var child_category = category
+			if child is SFXPreviewSection:
+				child_category = child.name
+			elif child is SFXPreviewCategory:
+				child_category = child.name
 			scan_node_recursive(child, child_category)
 
 func is_valid_sound_group(sound_group: Node) -> bool:
@@ -196,3 +199,9 @@ func get_audio_players(sound_group: Node) -> Array:
 		if child is AudioStreamPlayer3D and child.stream != null:
 			players.append(child)
 	return players
+
+func has_direct_audio_children(node: Node) -> bool:
+	for child in node.get_children():
+		if child is AudioStreamPlayer3D and child.stream != null:
+			return true
+	return false

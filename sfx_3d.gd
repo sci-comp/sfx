@@ -1,4 +1,5 @@
 extends Node
+class_name SFXManager3D
 
 var sound_groups: Dictionary = {}
 var main_camera: Camera3D
@@ -33,8 +34,8 @@ func get_camera_position() -> Vector3:
 func play(sound_group_name: String):
 	play_sound(sound_group_name, get_camera_position())
 
-func play_sound(sound_group_name: String, location: Vector3 = Vector3.ZERO):
-	if location == Vector3.ZERO:
+func play_sound(sound_group_name: String, location: Vector3 = Vector3.INF):
+	if location == Vector3.INF:
 		location = get_camera_position()
 	
 	if sound_groups.has(sound_group_name):

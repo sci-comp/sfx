@@ -1,4 +1,5 @@
 extends Node
+class_name SFXManager2D
 
 var sound_groups: Dictionary = {}
 

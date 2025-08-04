@@ -14,6 +14,10 @@ var total_variations: int:
 		return active_sources.size() + available_sources.size()
 
 func initialize(_sfx: Node):
+	if (max_voices == 0):
+		printerr("[SoundGroup3D] max_voices == 0")
+		return
+	
 	sfx = _sfx
 	
 	for child in get_children():
