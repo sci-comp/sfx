@@ -1,6 +1,6 @@
 using Godot;
 
-namespace Game
+namespace Audio
 {
     public partial class SFXBridge : Node
     {
