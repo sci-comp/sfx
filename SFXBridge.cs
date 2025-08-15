@@ -2,6 +2,9 @@ using Godot;
 
 namespace Audio
 {
+    /// <summary>
+    /// Autoload singleton accessible at /root/SFXBridge
+    /// </summary>
     public partial class SFXBridge : Node
     {
         private Node sfxNode;
