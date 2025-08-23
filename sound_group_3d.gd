@@ -1,3 +1,4 @@
+@tool
 extends Node
 class_name SoundGroup3D
 
@@ -7,18 +8,15 @@ class_name SoundGroup3D
 
 var available_sources: Array[AudioStreamPlayer3D] = []
 var active_sources: Array[AudioStreamPlayer3D] = []
-var sfx: Node
 
 var total_variations: int:
 	get:
 		return active_sources.size() + available_sources.size()
 
-func initialize(_sfx: Node):
+func initialize():
 	if (max_voices == 0):
 		printerr("[SoundGroup3D] max_voices == 0")
 		return
-	
-	sfx = _sfx
 	
 	for child in get_children():
 		if child is AudioStreamPlayer3D:
@@ -52,7 +50,8 @@ func get_available_source() -> AudioStreamPlayer3D:
 	var idx = randi() % available_sources.size()
 	src = available_sources[idx]
 	src.pitch_scale = randf_range(vary_pitch.x, vary_pitch.y)
-	src.volume_db = randf_range(linear_to_db(vary_volume.x), linear_to_db(vary_volume.y))
+	
+	src.volume_db = linear_to_db(randf_range(vary_volume.x, vary_volume.y))
 	available_sources.remove_at(idx)
 	active_sources.append(src)
 	

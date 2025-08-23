@@ -18,7 +18,7 @@ func _ready():
 func _unhandled_key_input(event):
 	if event.pressed and event.alt_pressed and event.keycode == KEY_P:
 		refresh_scene_context()
-		print("[SFXPreviewDock] Refreshed (Alt+Y)")
+		print("[SFXPreviewDock] Refreshed (Alt+P)")
 
 func setup_ui():
 	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
@@ -183,15 +183,14 @@ func play_sound_preview(sound_name: String):
 		refresh_scene_context()
 		return
 	
-	var audio_players = get_audio_players(sound_group)
+	if not sound_group.available_sources and not sound_group.active_sources:
+		sound_group.initialize()
 	
-	if audio_players.is_empty():
-		print("No valid audio players in ", sound_name)
-		return
-	
-	var random_player = audio_players[randi() % audio_players.size()]
-	random_player.play()
-	print("SFX Preview: Playing ", sound_name, " (", audio_players.size(), " variations)")
+	var source = sound_group.get_available_source()
+	if source:
+		source.play()
+	else:
+		print("No available source in ", sound_name)
 
 func get_audio_players(sound_group: Node) -> Array:
 	var players = []
