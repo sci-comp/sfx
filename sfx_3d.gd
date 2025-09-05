@@ -35,7 +35,8 @@ func play(sound_group_name: String):
 	play_sound(sound_group_name, get_camera_position())
 
 func play_sound(sound_group_name: String, location: Vector3 = Vector3.INF):
-	location = get_camera_position()
+	if location == Vector3.INF:
+		location = get_camera_position()
 	
 	if sound_groups.has(sound_group_name):
 		var sound_group = sound_groups[sound_group_name]

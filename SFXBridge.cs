@@ -1,3 +1,4 @@
+using Core;
 using Godot;
 
 namespace Audio
@@ -7,11 +8,13 @@ namespace Audio
     /// </summary>
     public partial class SFXBridge : Node
     {
+        private CameraBridge cameraBridge;
         private Node sfxNode;
         private Node sfx2dNode;
 
         public override void _Ready()
         {
+            cameraBridge = GetNode<CameraBridge>("/root/CameraBridge");
             sfxNode = GetNode("/root/SFX");
             sfx2dNode = GetNode("/root/SFX2D");
         }
@@ -19,6 +22,11 @@ namespace Audio
         public void Play(string soundGroupName)
         {
             sfxNode?.Call("play", soundGroupName);
+        }
+
+        public void PlaySound(string soundGroupName)
+        {
+            PlaySound(soundGroupName, cameraBridge.MainCamera.GlobalPosition);
         }
 
         public void PlaySound(string soundGroupName, Vector3 location)
